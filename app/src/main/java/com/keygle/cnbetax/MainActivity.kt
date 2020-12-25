@@ -47,12 +47,12 @@ class MainActivity : AppCompatActivity() {
         adapter = ArticleAdapter(listOf()) { item: ArticleList -> itemClicked(item) }
         binding.rvArticles.adapter = adapter
 
-        loadPartsAndUpdateList()
+        loadArticlesList()
     }
 
 
 
-    private fun loadPartsAndUpdateList() {
+    private fun loadArticlesList() {
         // Launch Kotlin Coroutine on Android's main thread
         // Note: better not to use GlobalScope, see:
         // https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/index.html
