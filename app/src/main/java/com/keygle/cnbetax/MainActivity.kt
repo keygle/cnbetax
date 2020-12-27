@@ -15,7 +15,7 @@ import java.math.BigInteger
 import java.security.MessageDigest
 
 
-class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
+class MainActivity : AppCompatActivity(){
     private val tag : String = MainActivity::class.java.simpleName
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ArticleAdapter
@@ -50,14 +50,10 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         binding.rvArticles.adapter = adapter
 
         loadArticlesList()
-    }
 
-
-    override fun onRefresh() {
-        Log.d(tag, "===========5556666==================")
-        //关闭下拉刷新进度条
-        binding.srMain.isRefreshing = false
-        loadArticlesList()
+        // 设置 下拉刷新的 layout
+        var swipeRefreshLayout: SwipeRefreshLayout = binding.srMain
+        swipeRefreshLayout.setOnRefreshListener { onRefresh() }
     }
 
     private fun loadArticlesList() {
@@ -98,6 +94,15 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                 Toast.makeText(this@MainActivity, "Exception ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+
+    private fun onRefresh(){
+        Log.d(tag, "===========下拉刷新==================")
+        // 关闭下拉刷新进度条
+        binding.srMain.isRefreshing = false
+        // 加载数据
+        loadArticlesList()
     }
 
 
