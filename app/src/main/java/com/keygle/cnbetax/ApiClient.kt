@@ -4,6 +4,7 @@ import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
 
+
 interface ApiClient {
-    @GET("articles.json") fun getArticlesAsync(): Deferred<Response<List<ArticleList>>>
+    @GET fun getArticlesAsync(@Url url: String?): Deferred<Response<ArticleListResponse>>
 }

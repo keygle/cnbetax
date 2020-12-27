@@ -12,7 +12,7 @@ object WebAccess{
         val retrofit = Retrofit.Builder()
             // The 10.0.2.2 address routes request from the Android emulator
             // to the localhost / 127.0.0.1 of the host PC
-            .baseUrl("https://ex.gressx.com/")
+            .baseUrl("https://api.cnbeta.com/")
             // Moshi maps JSON to classes
             .addConverterFactory(MoshiConverterFactory.create())
             // The call adapter handles threads

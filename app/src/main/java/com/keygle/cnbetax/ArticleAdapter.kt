@@ -22,7 +22,9 @@ class ArticleAdapter(var articleItemList: List<ArticleList>, private val clickLi
     inner class ArticleViewHolder(private val binding:ArticleListItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(article: ArticleList, clickListener: (ArticleList) -> Unit) {
             binding.articleTitle.text = article.title
-            binding.articleCreated.text = article.created
+            binding.articlePubtime.text = article.pubtime
+            binding.articleCounter.text = article.counter
+            binding.articleReplayCount.text = "0"
             binding.root.setOnClickListener { clickListener(article) }
         }
     }

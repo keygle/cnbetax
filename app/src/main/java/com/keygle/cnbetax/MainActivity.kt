@@ -1,16 +1,18 @@
 package com.keygle.cnbetax
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keygle.cnbetax.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.io.IOException
+
 
 class MainActivity : AppCompatActivity() {
     private val tag : String = MainActivity::class.java.simpleName
@@ -61,17 +63,20 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
             try {
                 // Execute web request through coroutine call adapter & retrofit
-                val webResponse = WebAccess.api.getArticlesAsync().await()
+                val url = getArticleListUrl("0")
+                Log.d(tag, url.toString())
+                val webResponse = WebAccess.api.getArticlesAsync(url).await()
 
                 if (webResponse.isSuccessful) {
                     // Get the returned & parsed JSON from the web response.
                     // Type specified explicitly here to make it clear that we already
                     // get parsed contents.
-                    val articleList: List<ArticleList>? = webResponse.body()
-                    Log.d(tag, articleList.toString())
+                    val articleListResponse: ArticleListResponse? = webResponse.body()
+                    Log.d(tag, articleListResponse.toString())
                     // Assign the list to the recycler view. If partsList is null,
                     // assign an empty list to the adapter.
-                    adapter.articleItemList = articleList ?: listOf()
+                    var articleList: List<ArticleList> = articleListResponse!!.result
+                    adapter.articleItemList = articleList?: listOf()
                     // Inform recycler view that data has changed.
                     // Makes sure the view re-renders itself
                     adapter.notifyDataSetChanged()
@@ -107,4 +112,28 @@ class MainActivity : AppCompatActivity() {
 //        startActivity(showDetailActivityIntent)
     }
 
+
+    /**
+     * 获取 Sid 小于 endSid 文章列表
+     * @param endSid 文章Sid
+     * @return 文章列表url
+     */
+    fun getArticleListUrl(endSid: String?): String? {
+        val sb = StringBuilder()
+        sb.append("app_key=10000")
+        sb.append("&end_sid=").append(endSid)
+        sb.append("&format=json")
+        sb.append("&method=Article.Lists")
+        sb.append("&timestamp=").append(System.currentTimeMillis())
+        sb.append("&v=2.8.5")
+        val signed: String = md5("$sb&mpuffgvbvbttn3Rc")
+        sb.append("&sign=").append(signed)
+        sb.insert(0, "https://api.cnbeta.com/capi?")
+        return sb.toString()
+    }
+
+    fun md5(input:String): String {
+        val md = MessageDigest.getInstance("MD5")
+        return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
+    }
 }
