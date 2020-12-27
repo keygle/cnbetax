@@ -5,19 +5,19 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.keygle.cnbetax.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.math.BigInteger
 import java.security.MessageDigest
-import java.io.IOException
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private val tag : String = MainActivity::class.java.simpleName
     private lateinit var binding: ActivityMainBinding
-
     private lateinit var adapter: ArticleAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +53,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    override fun onRefresh() {
+        Log.d(tag, "===========5556666==================")
+        //关闭下拉刷新进度条
+        binding.srMain.isRefreshing = false
+        loadArticlesList()
+    }
 
     private fun loadArticlesList() {
         // Launch Kotlin Coroutine on Android's main thread
@@ -76,10 +82,11 @@ class MainActivity : AppCompatActivity() {
                     // Assign the list to the recycler view. If partsList is null,
                     // assign an empty list to the adapter.
                     var articleList: List<ArticleList> = articleListResponse!!.result
-                    adapter.articleItemList = articleList?: listOf()
+                    adapter.articleItemList = articleList
                     // Inform recycler view that data has changed.
                     // Makes sure the view re-renders itself
                     adapter.notifyDataSetChanged()
+
                 } else {
                     // Print error information to the console
                     Log.e(tag, "Error ${webResponse.code()}")
