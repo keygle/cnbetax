@@ -8,7 +8,7 @@ data class ArticleListResponse(
     var code: Int,
     var msg: String,
     var status: String,
-    var result: List<ArticleList>
+    var result: MutableList<ArticleList>
 )
 
 @JsonClass(generateAdapter = true)

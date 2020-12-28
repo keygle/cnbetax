@@ -1,4 +1,4 @@
-package com.keygle.cnbetax
+package com.keygle.cnbetax.network
 
 import android.util.Log
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory

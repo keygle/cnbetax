@@ -52,7 +52,7 @@
                 tools:text="5" />
 
             <TextView
-                android:id="@+id/article_replay_count"
+                android:id="@+id/article_comments"
                 android:layout_width="72dp"
                 android:layout_height="24dp"
                 android:layout_gravity="right|center_vertical"

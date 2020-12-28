@@ -1,11 +1,12 @@
-package com.keygle.cnbetax
+package com.keygle.cnbetax.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.keygle.cnbetax.ArticleList
 import com.keygle.cnbetax.databinding.ArticleListItemBinding
 
-class ArticleAdapter(var articleItemList: List<ArticleList>, private val clickListener: (ArticleList) ->Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArticleAdapter(var articleList: MutableList<ArticleList>, private val clickListener: (ArticleList) ->Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ArticleListItemBinding.inflate(inflater, parent, false)
@@ -15,17 +16,45 @@ class ArticleAdapter(var articleItemList: List<ArticleList>, private val clickLi
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         // Populate ViewHolder with data that corresponds to the position in the list
         // which we are told to load
-        (holder as ArticleViewHolder).bind(articleItemList[position], clickListener)
+        (holder as ArticleViewHolder).bind(articleList[position], clickListener)
     }
-    override fun getItemCount() = articleItemList.size
 
     inner class ArticleViewHolder(private val binding:ArticleListItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(article: ArticleList, clickListener: (ArticleList) -> Unit) {
             binding.articleTitle.text = article.title
             binding.articlePubtime.text = article.pubtime
             binding.articleCounter.text = article.counter
-            binding.articleReplayCount.text = "0"
+            binding.articleComments.text = article.comments
             binding.root.setOnClickListener { clickListener(article) }
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return if (articleList == null) 0 else articleList.size
+    }
+
+
+    /**
+     * 获取最后一个 item 的 sid
+     * @return last sid
+     */
+    fun getLastSid(): String? {
+        val sid: String
+        sid = if (articleList == null || articleList.size <= 0) {
+            Int.MAX_VALUE.toString() + ""
+        } else {
+            val size: Int = articleList.size
+            articleList.get(size - 1).sid
+        }
+        return sid
+    }
+
+    fun update(result: MutableList<ArticleList>) {
+        if (result == null) return
+        if (articleList == null) {
+            articleList = result
+        } else {
+            articleList.addAll(result)
         }
     }
 }

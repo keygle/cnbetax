@@ -6,7 +6,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.keygle.cnbetax.adapter.ArticleAdapter
 import com.keygle.cnbetax.databinding.ActivityMainBinding
+import com.keygle.cnbetax.network.WebAccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -46,7 +48,10 @@ class MainActivity : AppCompatActivity(){
         // Create the PartAdapter
         // 1st parameter: our generated testData. listOf() generates empty list with correct type
         // 2nd parameter: item click handler function (implemented below) as function parameter
-        adapter = ArticleAdapter(listOf()) { item: ArticleList -> itemClicked(item) }
+        adapter =
+            ArticleAdapter(mutableListOf()) { item: ArticleList ->
+                itemClicked(item)
+            }
         binding.rvArticles.adapter = adapter
 
         loadArticlesList()
@@ -77,8 +82,8 @@ class MainActivity : AppCompatActivity(){
                     Log.d(tag, articleListResponse.toString())
                     // Assign the list to the recycler view. If partsList is null,
                     // assign an empty list to the adapter.
-                    var articleList: List<ArticleList> = articleListResponse!!.result
-                    adapter.articleItemList = articleList
+                    var articleList: MutableList<ArticleList> = articleListResponse!!.result
+                    adapter.articleList = articleList
                     // Inform recycler view that data has changed.
                     // Makes sure the view re-renders itself
                     adapter.notifyDataSetChanged()
