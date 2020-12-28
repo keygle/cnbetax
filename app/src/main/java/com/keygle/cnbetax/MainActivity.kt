@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.keygle.cnbetax.adapter.ArticleAdapter
 import com.keygle.cnbetax.bean.ArticleList
@@ -22,14 +23,15 @@ class MainActivity : BaseActivity(){
     private val tag : String = MainActivity::class.java.simpleName
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ArticleAdapter
-
+    private var isLoading = false // 是否正在加载更多
+    private var smoothUp = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        initParams()
         /*
          * A LinearLayoutManager is responsible for measuring and positioning item views within a
          * RecyclerView into a linear list. This means that it can produce either a horizontal or
@@ -57,14 +59,32 @@ class MainActivity : BaseActivity(){
             }
         binding.rvArticles.adapter = adapter
 
-        loadArticlesList()
+        binding.rvArticles.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    val lastVisibleItemPosition: Int = (binding.rvArticles.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    if (!isLoading && lastVisibleItemPosition == (binding.rvArticles.adapter as ArticleAdapter).itemCount - 1) {
+                        // start loadMore
+                        isLoading = true;
+                        loadArticlesList((binding.rvArticles.adapter as ArticleAdapter).getLastSid())
+                    }
+                }
+            }
+        })
+
+        loadArticlesList(Int.MAX_VALUE.toString() + "")
 
         // 设置 下拉刷新的 layout
         var swipeRefreshLayout: SwipeRefreshLayout = binding.srMain
         swipeRefreshLayout.setOnRefreshListener { onRefresh() }
     }
 
-    private fun loadArticlesList() {
+    private fun initParams() {
+        smoothUp = 56
+    }
+
+    private fun loadArticlesList(sid : String?) {
         // Launch Kotlin Coroutine on Android's main thread
         // Note: better not to use GlobalScope, see:
         // https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/index.html
@@ -73,7 +93,7 @@ class MainActivity : BaseActivity(){
         GlobalScope.launch(Dispatchers.Main) {
             try {
                 // Execute web request through coroutine call adapter & retrofit
-                val url = getArticleListUrl("0")
+                val url = getArticleListUrl(sid)
                 Log.d(tag, url.toString())
                 val webResponse = WebAccess.api.getArticlesAsync(url).await()
 
@@ -86,11 +106,15 @@ class MainActivity : BaseActivity(){
                     // Assign the list to the recycler view. If partsList is null,
                     // assign an empty list to the adapter.
                     var articleList: MutableList<ArticleList> = articleListResponse!!.result
-                    adapter.articleList = articleList
                     // Inform recycler view that data has changed.
                     // Makes sure the view re-renders itself
+                    if (isLoading){
+                        adapter.update(articleList);
+                        binding.rvArticles.smoothScrollBy(0, smoothUp);
+                    }else {
+                        adapter.articleList = articleList
+                    }
                     adapter.notifyDataSetChanged()
-
                 } else {
                     // Print error information to the console
                     Log.e(tag, "Error ${webResponse.code()}")
@@ -110,7 +134,7 @@ class MainActivity : BaseActivity(){
         // 关闭下拉刷新进度条
         binding.srMain.isRefreshing = false
         // 加载数据
-        loadArticlesList()
+        loadArticlesList(Int.MAX_VALUE.toString() + "")
     }
 
 
