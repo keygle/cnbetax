@@ -3,10 +3,11 @@ package com.keygle.cnbetax
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.keygle.cnbetax.adapter.ArticleAdapter
+import com.keygle.cnbetax.bean.ArticleList
+import com.keygle.cnbetax.bean.ArticleListResponse
 import com.keygle.cnbetax.databinding.ActivityMainBinding
 import com.keygle.cnbetax.network.WebAccess
 import kotlinx.coroutines.Dispatchers
@@ -17,16 +18,18 @@ import java.math.BigInteger
 import java.security.MessageDigest
 
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : BaseActivity(){
     private val tag : String = MainActivity::class.java.simpleName
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ArticleAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
         /*
          * A LinearLayoutManager is responsible for measuring and positioning item views within a
          * RecyclerView into a linear list. This means that it can produce either a horizontal or
@@ -129,6 +132,15 @@ class MainActivity : AppCompatActivity(){
 //        startActivity(showDetailActivityIntent)
     }
 
+//    fun onItemClick(item : ArticleList) {
+//        if (TextUtils.isEmpty(item.sid)) {
+//            return
+//        }
+//        val intent = Intent(this, ArticleDetailActivity::class.java)
+//        intent.putExtra(Keys.SID, sid)
+//        intent.putExtra(Keys.COMMENT, sid)
+//        startActivity(intent)
+//    }
 
     /**
      * 获取 Sid 小于 endSid 文章列表

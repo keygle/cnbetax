@@ -1,4 +1,4 @@
-package com.keygle.cnbetax
+package com.keygle.cnbetax.bean
 
 import com.squareup.moshi.JsonClass
 

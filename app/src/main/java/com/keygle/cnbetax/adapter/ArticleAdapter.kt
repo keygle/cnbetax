@@ -3,7 +3,7 @@ package com.keygle.cnbetax.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.keygle.cnbetax.ArticleList
+import com.keygle.cnbetax.bean.ArticleList
 import com.keygle.cnbetax.databinding.ArticleListItemBinding
 
 class ArticleAdapter(var articleList: MutableList<ArticleList>, private val clickListener: (ArticleList) ->Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -30,7 +30,7 @@ class ArticleAdapter(var articleList: MutableList<ArticleList>, private val clic
     }
 
     override fun getItemCount(): Int {
-        return if (articleList == null) 0 else articleList.size
+        return articleList.size
     }
 
 
@@ -40,18 +40,17 @@ class ArticleAdapter(var articleList: MutableList<ArticleList>, private val clic
      */
     fun getLastSid(): String? {
         val sid: String
-        sid = if (articleList == null || articleList.size <= 0) {
+        sid = if (articleList.size <= 0) {
             Int.MAX_VALUE.toString() + ""
         } else {
             val size: Int = articleList.size
-            articleList.get(size - 1).sid
+            articleList[size - 1].sid
         }
         return sid
     }
 
     fun update(result: MutableList<ArticleList>) {
-        if (result == null) return
-        if (articleList == null) {
+        if (articleList.size == 0) {
             articleList = result
         } else {
             articleList.addAll(result)
