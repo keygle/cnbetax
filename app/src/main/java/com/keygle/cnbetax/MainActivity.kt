@@ -1,5 +1,6 @@
 package com.keygle.cnbetax
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -25,19 +26,14 @@ class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ArticleAdapter
     private var isLoading = false // 是否正在加载更多
-    private var smoothUp = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        initParams()
-
         // toolbar
-        var toolbar:Toolbar = findViewById(R.id.toolbar);
-        toolbar.title = resources.getString(R.string.app_name)
-        setSupportActionBar(toolbar)
+        setToolBar()
 
         binding.rvArticles.layoutManager = LinearLayoutManager(this)
         /*
@@ -63,6 +59,7 @@ class MainActivity : AppCompatActivity(){
                     if (!isLoading && lastVisibleItemPosition == (binding.rvArticles.adapter as ArticleAdapter).itemCount - 1) {
                         // start loadMore
                         isLoading = true;
+                        Log.d("last", (binding.rvArticles.adapter as ArticleAdapter).getLastSid().toString())
                         loadArticlesList((binding.rvArticles.adapter as ArticleAdapter).getLastSid())
                     }
                 }
@@ -76,8 +73,10 @@ class MainActivity : AppCompatActivity(){
         swipeRefreshLayout.setOnRefreshListener { onRefresh() }
     }
 
-    private fun initParams() {
-        smoothUp = 56
+    private fun setToolBar() {
+        var toolbar:Toolbar = findViewById(R.id.toolbar);
+        toolbar.title = resources.getString(R.string.app_name)
+        setSupportActionBar(toolbar)
     }
 
     private fun loadArticlesList(sid : String?) {
@@ -105,9 +104,12 @@ class MainActivity : AppCompatActivity(){
                     // Inform recycler view that data has changed.
                     // Makes sure the view re-renders itself
                     if (isLoading){
+                        isLoading = false
                         adapter.update(articleList);
-                        binding.rvArticles.smoothScrollBy(0, smoothUp);
+                        // 向上滚动的距离
+                        binding.rvArticles.smoothScrollBy(0, 100);
                     }else {
+                        isLoading = false
                         adapter.articleList = articleList
                     }
                     adapter.notifyDataSetChanged()
@@ -129,38 +131,18 @@ class MainActivity : AppCompatActivity(){
         Log.d(tag, "===========下拉刷新==================")
         // 关闭下拉刷新进度条
         binding.srMain.isRefreshing = false
+        isLoading = false
         // 加载数据
         loadArticlesList(Int.MAX_VALUE.toString() + "")
     }
 
-
-
     private fun itemClicked(item : ArticleList) {
-        // Test code to add a new item to the list
-        // Will be replaced with UI function soon
-        //val newPart = PartData(Random.nextLong(0, 999999), "Infrared sensor")
-        //addPart(newPart)
-        //return
-
-        Toast.makeText(this, "Clicked: ${item.title}", Toast.LENGTH_LONG).show()
-
-//        // Launch second activity, pass part ID as string parameter
-//        val showDetailActivityIntent = Intent(this, PartDetailActivity::class.java)
-//        //showDetailActivityIntent.putExtra(Intent.EXTRA_TEXT, partItem.id.toString())
-//        showDetailActivityIntent.putExtra("title", item.title)
-//        showDetailActivityIntent.putExtra("created", item.created)
-//        startActivity(showDetailActivityIntent)
+        // Launch article activity, pass sid as string parameter
+        val showDetailActivityIntent = Intent(this, ArticleActivity::class.java)
+        showDetailActivityIntent.putExtra("title", item.title)
+        showDetailActivityIntent.putExtra("sid", item.sid)
+        startActivity(showDetailActivityIntent)
     }
-
-//    fun onItemClick(item : ArticleList) {
-//        if (TextUtils.isEmpty(item.sid)) {
-//            return
-//        }
-//        val intent = Intent(this, ArticleDetailActivity::class.java)
-//        intent.putExtra(Keys.SID, sid)
-//        intent.putExtra(Keys.COMMENT, sid)
-//        startActivity(intent)
-//    }
 
     /**
      * 获取 Sid 小于 endSid 文章列表

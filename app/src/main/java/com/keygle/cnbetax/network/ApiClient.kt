@@ -8,4 +8,5 @@ import retrofit2.http.*
 
 interface ApiClient {
     @GET fun getArticlesAsync(@Url url: String?): Deferred<Response<ArticleListResponse>>
+//    @GET fun getDetailAsync(@Url url: String?): Deferred<Response<DetailResponse>>
 }
