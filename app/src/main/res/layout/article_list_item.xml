@@ -14,7 +14,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
-        android:background="@drawable/shap_article_list_background"
+        android:layout_marginBottom="5dp"
         android:minHeight="72dp">
 
         <LinearLayout

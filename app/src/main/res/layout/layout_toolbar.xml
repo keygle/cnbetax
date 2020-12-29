@@ -8,6 +8,5 @@
     android:layout_height="wrap_content"
     android:background="@color/theme_1_deep"
     android:minHeight="?attr/actionBarSize"
-    app:theme="@style/ToolbarTheme"
-    app:title="@string/app_name"
-    />
+    app:theme="@style/ToolbarTheme">
+</androidx.appcompat.widget.Toolbar>

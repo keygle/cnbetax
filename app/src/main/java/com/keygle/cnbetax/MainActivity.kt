@@ -3,6 +3,8 @@ package com.keygle.cnbetax
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -15,11 +17,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.math.BigInteger
-import java.security.MessageDigest
+import com.keygle.cnbetax.utils.Tools
 
 
-class MainActivity : BaseActivity(){
+class MainActivity : AppCompatActivity(){
     private val tag : String = MainActivity::class.java.simpleName
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ArticleAdapter
@@ -32,17 +33,12 @@ class MainActivity : BaseActivity(){
         val view = binding.root
         setContentView(view)
         initParams()
-        /*
-         * A LinearLayoutManager is responsible for measuring and positioning item views within a
-         * RecyclerView into a linear list. This means that it can produce either a horizontal or
-         * vertical list depending on which parameter you pass in to the LinearLayoutManager
-         * constructor. By default, if you don'tag specify an orientation, you get a vertical list.
-         * In our case, we want a vertical list, so we don'tag need to pass in an orientation flag to
-         * the LinearLayoutManager constructor.
-         *
-         * There are other LayoutManagers available to display your data in uniform grids,
-         * staggered grids, and more! See the developer documentation for more details.
-         */
+
+        // toolbar
+        var toolbar:Toolbar = findViewById(R.id.toolbar);
+        toolbar.title = resources.getString(R.string.app_name)
+        setSupportActionBar(toolbar)
+
         binding.rvArticles.layoutManager = LinearLayoutManager(this)
         /*
          * Use this setting to improve performance if you know that changes in content do not
@@ -179,14 +175,11 @@ class MainActivity : BaseActivity(){
         sb.append("&method=Article.Lists")
         sb.append("&timestamp=").append(System.currentTimeMillis())
         sb.append("&v=2.8.5")
-        val signed: String = md5("$sb&mpuffgvbvbttn3Rc")
+        val signed: String = Tools.md5("$sb&mpuffgvbvbttn3Rc")
         sb.append("&sign=").append(signed)
         sb.insert(0, "https://api.cnbeta.com/capi?")
         return sb.toString()
     }
 
-    fun md5(input:String): String {
-        val md = MessageDigest.getInstance("MD5")
-        return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
-    }
+
 }
