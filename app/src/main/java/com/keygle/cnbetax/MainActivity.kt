@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.IOException
-import com.keygle.cnbetax.utils.Tools
+import com.keygle.cnbetax.utils.Tools.getArticleListUrl
 
 
 class MainActivity : AppCompatActivity(){
@@ -138,30 +138,9 @@ class MainActivity : AppCompatActivity(){
 
     private fun itemClicked(item : ArticleList) {
         // Launch article activity, pass sid as string parameter
-        val showDetailActivityIntent = Intent(this, ArticleActivity::class.java)
-        showDetailActivityIntent.putExtra("title", item.title)
-        showDetailActivityIntent.putExtra("sid", item.sid)
-        startActivity(showDetailActivityIntent)
+        val detailActivityIntent = Intent(this, ArticleActivity::class.java)
+        detailActivityIntent.putExtra("title", item.title)
+        detailActivityIntent.putExtra("sid", item.sid)
+        startActivity(detailActivityIntent)
     }
-
-    /**
-     * 获取 Sid 小于 endSid 文章列表
-     * @param endSid 文章Sid
-     * @return 文章列表url
-     */
-    fun getArticleListUrl(endSid: String?): String? {
-        val sb = StringBuilder()
-        sb.append("app_key=10000")
-        sb.append("&end_sid=").append(endSid)
-        sb.append("&format=json")
-        sb.append("&method=Article.Lists")
-        sb.append("&timestamp=").append(System.currentTimeMillis())
-        sb.append("&v=2.8.5")
-        val signed: String = Tools.md5("$sb&mpuffgvbvbttn3Rc")
-        sb.append("&sign=").append(signed)
-        sb.insert(0, "https://api.cnbeta.com/capi?")
-        return sb.toString()
-    }
-
-
 }
