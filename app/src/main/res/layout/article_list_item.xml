@@ -8,61 +8,69 @@
             type="com.keygle.cnbetax.bean.ArticleList" />
     </data>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
         android:background="@drawable/shap_article_list_background"
-        android:padding="10dp">
+        android:minHeight="72dp">
 
-        <TextView
-            android:id="@+id/article_pubtime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="2017-2-07"
-            android:textSize="12sp"
-            android:lines="1"
-            android:ellipsize="end"
-            />
-        <TextView
-            android:id="@+id/article_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            tools:text="Item name"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="2dp"
-            />
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="28dp"
-            >
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:padding="8dp">
 
             <TextView
-                android:id="@+id/article_counter"
+                android:id="@+id/article_pubtime"
                 android:layout_width="wrap_content"
-                android:minWidth="52dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:drawableLeft="@drawable/ic_visibility_grey600_18dp"
-                android:gravity="center"
-                tools:text="5" />
+                android:ellipsize="end"
+                android:lines="1"
+                android:textSize="12sp"
+                tools:text="2017-2-07" />
 
             <TextView
-                android:id="@+id/article_comments"
-                android:layout_width="72dp"
-                android:layout_height="24dp"
-                android:layout_gravity="right|center_vertical"
-                android:drawableLeft="@drawable/ic_textsms_grey600_18dp"
-                android:elevation="1dp"
-                android:ellipsize="end"
-                android:gravity="center"
-                tools:text="12" />
+                android:id="@+id/article_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="2dp"
+                android:textSize="16sp"
+                tools:text="Item name" />
 
-        </FrameLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="28dp">
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/article_counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:drawableStart="@drawable/ic_visibility_grey600_18dp"
+                    android:gravity="center"
+                    android:minWidth="52dp"
+                    tools:text="5" />
+
+                <TextView
+                    android:id="@+id/article_comments"
+                    android:layout_width="72dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:drawableStart="@drawable/ic_textsms_grey600_18dp"
+                    android:elevation="1dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    tools:text="12" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </layout>
