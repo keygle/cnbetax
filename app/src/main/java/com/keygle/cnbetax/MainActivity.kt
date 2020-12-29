@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.IOException
-import com.keygle.cnbetax.utils.Tools.getArticleListUrl
+import com.keygle.cnbetax.utils.RequestUtil.getArticleListUrl
 
 
 class MainActivity : AppCompatActivity(){
