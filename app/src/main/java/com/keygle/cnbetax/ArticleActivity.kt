@@ -72,7 +72,7 @@ class ArticleActivity : AppCompatActivity() {
                     // Makes sure the view re-renders itself
                     detail.bodytext = HtmlCompat.fromHtml(HtmlUtil.htmlFilter(detail.bodytext), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
                     detail.hometext = HtmlCompat.fromHtml(HtmlUtil.htmlFilter(detail.hometext), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
-                    
+
                     binding.detail = detail
                 } else {
                     // Print error information to the console
