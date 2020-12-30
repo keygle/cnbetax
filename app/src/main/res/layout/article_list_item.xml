@@ -41,7 +41,8 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="2dp"
                 android:textSize="16sp"
-                tools:text="Item name" />
+                tools:text="Item name"
+                tools:textColor="#000000" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -52,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:drawableStart="@drawable/ic_visibility_grey600_18dp"
+                    android:drawableStart="@drawable/ic_visibility"
                     android:gravity="center"
                     android:minWidth="52dp"
                     tools:text="5" />
@@ -62,10 +63,12 @@
                     android:layout_width="72dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
-                    android:drawableStart="@drawable/ic_textsms_grey600_18dp"
+                    android:background="@drawable/md_ripple_white"
+                    android:drawableStart="@drawable/ic_textsms"
                     android:elevation="1dp"
                     android:ellipsize="end"
                     android:gravity="center"
+                    android:padding="4dp"
                     tools:text="12" />
 
             </FrameLayout>

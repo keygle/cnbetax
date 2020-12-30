@@ -2,9 +2,7 @@ package com.keygle.cnbetax
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Html
 import android.text.TextUtils
-import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
@@ -46,6 +44,9 @@ class ArticleActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true);
     }
 
+    /**
+     * 加载远程数据
+     */
     private fun loadDetail(sid : String?) {
         // Launch Kotlin Coroutine on Android's main thread
         // Note: better not to use GlobalScope, see:
@@ -70,6 +71,7 @@ class ArticleActivity : AppCompatActivity() {
                     var detail: Detail = detailResponse!!.result
                     // Inform recycler view that data has changed.
                     // Makes sure the view re-renders itself
+                    // 数据转换
                     detail.bodytext = HtmlCompat.fromHtml(HtmlUtil.htmlFilter(detail.bodytext), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
                     detail.hometext = HtmlCompat.fromHtml(HtmlUtil.htmlFilter(detail.hometext), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
 
@@ -87,7 +89,9 @@ class ArticleActivity : AppCompatActivity() {
         }
     }
 
-
+    /**
+     * 获得当前文章的sid
+     */
     private fun getCurSid(intent: Intent?) {
         if (intent != null) {
             val sid = intent.getStringExtra("sid")
@@ -101,6 +105,10 @@ class ArticleActivity : AppCompatActivity() {
         Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
         finish()
     }
+
+    /**
+     * 返回按钮 实现
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {

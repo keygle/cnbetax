@@ -11,4 +11,6 @@
     <color name="theme_1_deep">#3E6B89</color>
     <color name="theme_1_dark">#122D42</color>
     <color name="theme_1_accent">#F47C7C</color>
+    <color name="text_color_deep">#1E1E1E</color>
+    <color name="ripple_white">#FFDDDDDD</color>
 </resources>
