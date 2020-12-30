@@ -3,6 +3,7 @@ package com.keygle.cnbetax
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
@@ -14,6 +15,7 @@ import com.keygle.cnbetax.bean.DetailResponse
 import com.keygle.cnbetax.databinding.ArticleDetailBinding
 import com.keygle.cnbetax.network.WebAccess
 import com.keygle.cnbetax.utils.HtmlUtil
+import com.keygle.cnbetax.utils.ImageGetterUtil
 import com.keygle.cnbetax.utils.RequestUtil.getDetailUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -72,10 +74,10 @@ class ArticleActivity : AppCompatActivity() {
                     // Inform recycler view that data has changed.
                     // Makes sure the view re-renders itself
                     // 数据转换
-                    detail.bodytext = HtmlCompat.fromHtml(HtmlUtil.htmlFilter(detail.bodytext), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
                     detail.hometext = HtmlCompat.fromHtml(HtmlUtil.htmlFilter(detail.hometext), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
-
                     binding.detail = detail
+                    // 内容 特殊处理
+                    displayHtml(HtmlUtil.htmlFilter(detail.bodytext))
                 } else {
                     // Print error information to the console
                     Log.e(tag, "Error ${webResponse.code()}")
@@ -118,4 +120,22 @@ class ArticleActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private fun displayHtml(html: String) {
+        var tvContent = binding.tvContent
+        // Creating object of ImageGetter class you just created
+        val imageGetter = ImageGetterUtil(resources, tvContent)
+
+        // Using Html framework to parse html
+        val styledText=HtmlCompat.fromHtml(html,
+            HtmlCompat.FROM_HTML_MODE_LEGACY,
+            imageGetter,null)
+
+        // to enable image/link clicking
+        // stvContent.movementMethod = LinkMovementMethod.getInstance()
+
+        // setting the text after formatting html and downloadig and setting images
+        tvContent.text = styledText
+    }
+
 }

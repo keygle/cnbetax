@@ -77,7 +77,6 @@
                     android:lineSpacingExtra="6dp"
                     android:textColor="#555555"
                     android:textSize="16sp"
-                    tools:text="@{detail.bodytext}"
                     />
             </LinearLayout>
         </ScrollView>
