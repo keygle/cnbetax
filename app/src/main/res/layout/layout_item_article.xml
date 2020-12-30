@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -15,6 +16,7 @@
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
         android:layout_marginBottom="5dp"
+        android:foreground="?android:selectableItemBackground"
         android:minHeight="72dp">
 
         <LinearLayout
@@ -23,6 +25,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:orientation="vertical"
+            android:clickable="false"
             android:padding="8dp">
 
             <TextView
@@ -53,10 +56,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:drawableStart="@drawable/ic_visibility"
                     android:gravity="center"
                     android:minWidth="52dp"
-                    tools:text="5" />
+                    tools:text="5"
+                    app:drawableStartCompat="@drawable/ic_visibility" />
 
                 <TextView
                     android:id="@+id/article_comments"
@@ -64,12 +67,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:background="@drawable/md_ripple_white"
-                    android:drawableStart="@drawable/ic_textsms"
                     android:elevation="1dp"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:padding="4dp"
-                    tools:text="12" />
+                    tools:text="12"
+                    app:drawableStartCompat="@drawable/ic_textsms" />
 
             </FrameLayout>
 

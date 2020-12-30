@@ -1,18 +1,18 @@
-package com.keygle.cnbetax
+package com.keygle.cnbetax.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.text.HtmlCompat
+import com.keygle.cnbetax.R
 import com.keygle.cnbetax.bean.Detail
 import com.keygle.cnbetax.bean.DetailResponse
-import com.keygle.cnbetax.databinding.ArticleDetailBinding
+import com.keygle.cnbetax.databinding.ActivityArticleDetailBinding
 import com.keygle.cnbetax.network.WebAccess
 import com.keygle.cnbetax.utils.HtmlUtil
 import com.keygle.cnbetax.utils.ImageGetterUtil
@@ -26,11 +26,11 @@ import java.io.IOException
 class ArticleActivity : AppCompatActivity() {
     private val tag : String = MainActivity::class.java.simpleName
     private var curSid : String? = ""
-    private lateinit var binding: ArticleDetailBinding
+    private lateinit var binding: ActivityArticleDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ArticleDetailBinding.inflate(layoutInflater)
+        binding = ActivityArticleDetailBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
         getCurSid(intent);
@@ -39,7 +39,7 @@ class ArticleActivity : AppCompatActivity() {
     }
 
     private fun setToolBar() {
-        var toolbar: Toolbar = findViewById(R.id.toolbar)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
         toolbar.title = "详情"
         setSupportActionBar(toolbar)
         supportActionBar!!.setHomeButtonEnabled(true);
@@ -60,7 +60,7 @@ class ArticleActivity : AppCompatActivity() {
                 // Execute web request through coroutine call adapter & retrofit
                 val url = getDetailUrl(sid)
                 Log.d(tag, url.toString())
-                val webResponse = WebAccess.api.getDetailAsync(url).await()
+                val webResponse = WebAccess.api.getArticleDetailAsync(url).await()
 
                 if (webResponse.isSuccessful) {
                     // Get the returned & parsed JSON from the web response.

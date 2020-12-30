@@ -1,7 +1,8 @@
-package com.keygle.cnbetax
+package com.keygle.cnbetax.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -11,6 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.keygle.cnbetax.R
 import com.keygle.cnbetax.adapter.ArticleAdapter
 import com.keygle.cnbetax.bean.ArticleList
 import com.keygle.cnbetax.bean.ArticleListResponse
@@ -47,10 +49,7 @@ class MainActivity : AppCompatActivity(){
         // Create the PartAdapter
         // 1st parameter: our generated testData. listOf() generates empty list with correct type
         // 2nd parameter: item click handler function (implemented below) as function parameter
-        adapter =
-            ArticleAdapter(mutableListOf()) { item: ArticleList ->
-                itemClicked(item)
-            }
+        adapter = ArticleAdapter(mutableListOf(), { item: ArticleList -> itemClicked(item) }, { item: ArticleList -> commentClicked(item) })
         binding.rvArticles.adapter = adapter
 
         binding.rvArticles.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -62,7 +61,7 @@ class MainActivity : AppCompatActivity(){
                         // start loadMore
                         isLoading = true;
                         Log.d("last", (binding.rvArticles.adapter as ArticleAdapter).getLastSid().toString())
-                        loadArticlesList((binding.rvArticles.adapter as ArticleAdapter).getLastSid())
+                        loadArticleList((binding.rvArticles.adapter as ArticleAdapter).getLastSid())
                     }
                 }
             }
@@ -71,12 +70,12 @@ class MainActivity : AppCompatActivity(){
         autoRefresh()
 
         // 设置 下拉刷新的 layout
-        var swipeRefreshLayout: SwipeRefreshLayout = binding.srMain
+        val swipeRefreshLayout: SwipeRefreshLayout = binding.srMain
         swipeRefreshLayout.setOnRefreshListener { autoRefresh() }
     }
 
     private fun setToolBar() {
-        var toolbar:Toolbar = findViewById(R.id.toolbar);
+        val toolbar:Toolbar = findViewById(R.id.toolbar);
         toolbar.title = resources.getString(R.string.app_name)
         setSupportActionBar(toolbar)
     }
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity(){
         return true
     }
 
-    private fun loadArticlesList(sid : String?) {
+    private fun loadArticleList(sid : String?) {
         // Launch Kotlin Coroutine on Android's main thread
         // Note: better not to use GlobalScope, see:
         // https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/index.html
@@ -153,7 +152,7 @@ class MainActivity : AppCompatActivity(){
         binding.srMain.isRefreshing = false
         isLoading = false
         // 加载数据
-        loadArticlesList(Int.MAX_VALUE.toString() + "")
+        loadArticleList(Int.MAX_VALUE.toString() + "")
     }
 
     private fun itemClicked(item : ArticleList) {
@@ -162,5 +161,17 @@ class MainActivity : AppCompatActivity(){
         detailActivityIntent.putExtra("title", item.title)
         detailActivityIntent.putExtra("sid", item.sid)
         startActivity(detailActivityIntent)
+    }
+
+    private fun commentClicked(item : ArticleList) {
+        if(item.comments.toInt() > 0) {
+            // Launch comment activity, pass sid as string parameter
+            val commentActivityIntent = Intent(this, CommentActivity::class.java)
+            commentActivityIntent.putExtra("comments", item.comments)
+            commentActivityIntent.putExtra("sid", item.sid)
+            startActivity(commentActivityIntent)
+        }else{
+            Toast.makeText(this, "暂时还没评论~", Toast.LENGTH_SHORT).show()
+        }
     }
 }
