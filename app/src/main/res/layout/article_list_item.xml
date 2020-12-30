@@ -42,7 +42,7 @@
                 android:layout_marginBottom="2dp"
                 android:textSize="16sp"
                 tools:text="Item name"
-                tools:textColor="#000000" />
+                tools:textColor="@color/black" />
 
             <FrameLayout
                 android:layout_width="match_parent"

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/totop"
+          android:icon="@drawable/ic_scroll_top_24dp"
+          app:showAsAction="ifRoom"
+          android:title="@string/to_top"/>
+
+    <item android:title="@string/refresh"
+          android:icon="@drawable/ic_autorenew_black_24dp"
+          app:showAsAction="never"
+          android:id="@+id/refresh"/>
+
+    <item android:title="@string/setting"
+          android:id="@+id/setting"
+          app:showAsAction="never"/>
+
+    <item android:title="@string/about"
+          app:showAsAction="never"
+          android:id="@+id/about"/>
+</menu>

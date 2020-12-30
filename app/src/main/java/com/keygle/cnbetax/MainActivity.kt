@@ -3,6 +3,8 @@ package com.keygle.cnbetax
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,11 +16,11 @@ import com.keygle.cnbetax.bean.ArticleList
 import com.keygle.cnbetax.bean.ArticleListResponse
 import com.keygle.cnbetax.databinding.ActivityMainBinding
 import com.keygle.cnbetax.network.WebAccess
+import com.keygle.cnbetax.utils.RequestUtil.getArticleListUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.IOException
-import com.keygle.cnbetax.utils.RequestUtil.getArticleListUrl
 
 
 class MainActivity : AppCompatActivity(){
@@ -66,17 +68,35 @@ class MainActivity : AppCompatActivity(){
             }
         })
 
-        loadArticlesList(Int.MAX_VALUE.toString() + "")
+        autoRefresh()
 
         // 设置 下拉刷新的 layout
         var swipeRefreshLayout: SwipeRefreshLayout = binding.srMain
-        swipeRefreshLayout.setOnRefreshListener { onRefresh() }
+        swipeRefreshLayout.setOnRefreshListener { autoRefresh() }
     }
 
     private fun setToolBar() {
         var toolbar:Toolbar = findViewById(R.id.toolbar);
         toolbar.title = resources.getString(R.string.app_name)
         setSupportActionBar(toolbar)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.article_act_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override  fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.about -> Toast.makeText(this, """感谢使用 by gressx""",
+                Toast.LENGTH_LONG
+            ).show()
+            R.id.totop -> binding.rvArticles.smoothScrollToPosition(0)
+            R.id.refresh -> autoRefresh()
+            R.id.home -> onBackPressed()
+            R.id.setting -> Toast.makeText(this, "即将开放有图模式!", Toast.LENGTH_SHORT).show()
+        }
+        return true
     }
 
     private fun loadArticlesList(sid : String?) {
@@ -127,8 +147,8 @@ class MainActivity : AppCompatActivity(){
     }
 
 
-    private fun onRefresh(){
-        Log.d(tag, "===========下拉刷新==================")
+    private fun autoRefresh(){
+        Log.d(tag, "===========下拉加载刷新==================")
         // 关闭下拉刷新进度条
         binding.srMain.isRefreshing = false
         isLoading = false
