@@ -74,6 +74,8 @@ class ArticleActivity : AppCompatActivity() {
                     // Inform recycler view that data has changed.
                     // Makes sure the view re-renders itself
                     // 数据转换
+                    var source: String = HtmlCompat.fromHtml(detail.source, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+                    detail.source = "${detail.time}   $source   ${detail.counter}次阅读  ${detail.comments}条评论"
                     detail.hometext = HtmlCompat.fromHtml(HtmlUtil.htmlFilter(detail.hometext), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
                     binding.detail = detail
                     // 内容 特殊处理

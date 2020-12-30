@@ -47,13 +47,13 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_time"
+                    android:id="@+id/tv_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="6dp"
                     android:textColor="#bb888888"
                     android:textSize="12sp"
-                    tools:text="@{detail.time}"
+                    tools:text="@{detail.source}"
                     />
 
                 <TextView
