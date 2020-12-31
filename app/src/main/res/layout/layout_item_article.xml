@@ -72,6 +72,7 @@
                     android:gravity="center"
                     android:padding="4dp"
                     tools:text="12"
+                    android:foreground="?android:selectableItemBackground"
                     app:drawableStartCompat="@drawable/ic_textsms" />
 
             </FrameLayout>

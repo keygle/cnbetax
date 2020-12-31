@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity(){
             R.id.totop -> binding.rvArticles.smoothScrollToPosition(0)
             R.id.refresh -> autoRefresh()
             R.id.home -> onBackPressed()
-            R.id.setting -> Toast.makeText(this, "即将开放有图模式!", Toast.LENGTH_SHORT).show()
+            R.id.setting -> Toast.makeText(this, "开发中!", Toast.LENGTH_SHORT).show()
         }
         return true
     }

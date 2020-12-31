@@ -53,8 +53,9 @@ class CommentActivity : AppCompatActivity() {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     val lastVisibleItemPosition: Int = (binding.rvComments.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     // 超过了 当前的
-                    if (!isLoading && lastVisibleItemPosition == (binding.rvComments.adapter as CommentAdapter).itemCount - 1 && (binding.rvComments.adapter as CommentAdapter).itemCount > comments ) {
+                    if (!isLoading && lastVisibleItemPosition == (binding.rvComments.adapter as CommentAdapter).itemCount - 1 && (binding.rvComments.adapter as CommentAdapter).itemCount < comments ) {
                         // start loadMore
+                        Log.d("TTTTTTTTTTTTTTTTT", lastVisibleItemPosition.toString())
                         isLoading = true;
                         Log.d("last", page.toString())
                         page += 1
