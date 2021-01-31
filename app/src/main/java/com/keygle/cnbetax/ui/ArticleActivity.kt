@@ -2,12 +2,15 @@ package com.keygle.cnbetax.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
 import android.text.TextUtils
+import android.text.style.QuoteSpan
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import com.keygle.cnbetax.R
 import com.keygle.cnbetax.bean.Detail
@@ -16,6 +19,7 @@ import com.keygle.cnbetax.databinding.ActivityArticleDetailBinding
 import com.keygle.cnbetax.network.WebAccess
 import com.keygle.cnbetax.utils.HtmlUtil
 import com.keygle.cnbetax.utils.ImageGetterUtil
+import com.keygle.cnbetax.utils.QuoteSpanClass
 import com.keygle.cnbetax.utils.RequestUtil.getDetailUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -132,12 +136,39 @@ class ArticleActivity : AppCompatActivity() {
         val styledText=HtmlCompat.fromHtml(html,
             HtmlCompat.FROM_HTML_MODE_LEGACY,
             imageGetter,null)
-
+        replaceQuoteSpans(styledText as Spannable)
         // to enable image/link clicking
         // stvContent.movementMethod = LinkMovementMethod.getInstance()
 
         // setting the text after formatting html and downloadig and setting images
         tvContent.text = styledText
     }
+
+
+    private fun replaceQuoteSpans(spannable: Spannable)
+    {
+        val quoteSpans: Array<QuoteSpan> =
+                spannable.getSpans(0, spannable.length - 1, QuoteSpan::class.java)
+
+        for (quoteSpan in quoteSpans)
+        {
+            val start: Int = spannable.getSpanStart(quoteSpan)
+            val end: Int = spannable.getSpanEnd(quoteSpan)
+            val flags: Int = spannable.getSpanFlags(quoteSpan)
+            spannable.removeSpan(quoteSpan)
+            spannable.setSpan(
+                    QuoteSpanClass(
+                            // background color
+                            ContextCompat.getColor(this, R.color.white),
+                            // strip color
+                            ContextCompat.getColor(this, R.color.white),
+                            // strip width
+                            0F, 0F
+                    ),
+                    start, end, flags
+            )
+        }
+    }
+
 
 }
